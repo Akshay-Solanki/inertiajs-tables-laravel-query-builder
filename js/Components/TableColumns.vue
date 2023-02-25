@@ -5,23 +5,7 @@
     :active="hasHiddenColumns"
   >
     <template #button>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5"
-        :class="{
-          'text-gray-400': !hasHiddenColumns,
-          'text-green-400': hasHiddenColumns,
-        }"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-      >
-        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-        <path
-          fill-rule="evenodd"
-          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-          clip-rule="evenodd"
-        />
-      </svg>
+      <i class="mdi mdi-eye font-size-16" />
     </template>
 
     <div
@@ -30,23 +14,27 @@
       aria-labelledby="toggle-columns-menu"
       class="min-w-max"
     >
-      <div class="px-2">
-        <ul class="divide-y divide-gray-200">
+      <div class="">
           <li
             v-for="(column, key) in props.columns"
             v-show="column.can_be_hidden"
             :key="key"
-            class="py-2 flex items-center justify-between"
+            class="d-flex align-items-center justify-content-between"
           >
-            <p
-              class="text-sm text-gray-900"
+          <!-- py-2 flex items-center justify-between -->
+            <span
+              class="text-sm text-gray-900 dark:text-gray-100 text-nowrap px-3"
             >
               {{ column.label }}
-            </p>
-
-            <button
+            </span>
+            <b-form-checkbox switch size="lg"
+            :checked="!column.hidden"
+            :unchecked-value="false"
+            @click.prevent="onChange(column.key, column.hidden)"
+            ></b-form-checkbox>
+            <!-- <button
               type="button"
-              class="ml-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
+              class="ml-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-light-blue-500"
               :class="{
                 'bg-green-500': !column.hidden,
                 'bg-gray-200': column.hidden,
@@ -66,9 +54,9 @@
                 }"
                 class="inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
               />
-            </button>
+            </button> -->
           </li>
-        </ul>
+
       </div>
     </div>
   </ButtonWithDropdown>

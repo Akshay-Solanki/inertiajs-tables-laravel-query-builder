@@ -3,7 +3,7 @@
     name="per_page"
     :dusk="dusk"
     :value="value"
-    class="block focus:ring-indigo-500 focus:border-indigo-500 min-w-max shadow-sm text-sm border-gray-300 rounded-md"
+    class="form-control w-auto"
     @change="onChange($event.target.value)"
   >
     <option
@@ -19,7 +19,7 @@
 <script setup>
 import { computed } from "vue";
 import uniq from "lodash-es/uniq";
-import { getTranslations } from "../translations.js";
+import { getTranslations } from "./translations.js";
 
 const translations = getTranslations();
 

@@ -4,11 +4,12 @@
       ref="tableFieldset"
       :key="`table-${name}`"
       :dusk="`table-${name}`"
-      class="min-w-0"
       :class="{'opacity-75': isVisiting}"
     >
-      <div class="flex flex-row flex-wrap sm:flex-nowrap justify-start px-4 sm:px-0">
-        <div class="order-2 sm:order-1 mr-2 sm:mr-4">
+    <!-- flex flex-row flex-wrap sm:flex-nowrap justify-start px-4 sm:px-0 -->
+      <div class="d-flex flex-wrap justify-start px-4 px-sm-0 flex-sm-nowrap m-3">
+        <!-- order-2 sm:order-1 mr-2 sm:mr-4 -->
+        <div v-if="queryBuilderProps.hasFilters" class="order-1 order-sm-1 mr-2 mr-sm-4">
           <slot
             name="tableFilter"
             :has-filters="queryBuilderProps.hasFilters"
@@ -24,10 +25,10 @@
             />
           </slot>
         </div>
-
+        <!-- flex flex-row w-full sm:w-auto sm:flex-grow order-1 sm:order-2 mb-2 sm:mb-0 sm:mr-4 -->
         <div
           v-if="queryBuilderProps.globalSearch"
-          class="flex flex-row w-full sm:w-auto sm:flex-grow order-1 sm:order-2 mb-2 sm:mb-0 sm:mr-4"
+          class="d-flex flex-row w-100 flex-sm-grow-0 order-1 order-sm-2 mb-2 mb-sm-0"
         >
           <slot
             name="tableGlobalSearch"
@@ -46,19 +47,14 @@
           </slot>
         </div>
 
-
-        <slot
-          name="tableReset"
-          can-be-reset="canBeReset"
-          :on-click="resetQuery"
+        <div
+          v-if="canBeReset"
+          class="d-flex flex-wrap"
         >
-          <div
-            v-if="canBeReset"
-            class="order-5 sm:order-3 sm:mr-4 ml-auto"
-          >
+          <slot name="tableReset" :on-click="resetQuery">
             <TableReset :on-click="resetQuery" />
-          </div>
-        </slot>
+          </slot>
+        </div>
 
         <slot
           name="tableAddSearchRow"
@@ -115,7 +111,7 @@
       >
         <TableWrapper :class="{ 'mt-3': !hasOnlyData }">
           <slot name="table">
-            <table class="min-w-full divide-y divide-gray-200 bg-white">
+            <table class="table">
               <thead class="bg-gray-50">
                 <slot
                   name="head"
@@ -123,7 +119,7 @@
                   :sort-by="sortBy"
                   :header="header"
                 >
-                  <tr class="font-medium text-xs uppercase text-left tracking-wider text-gray-500 py-3 px-6">
+                  <tr class="">
                     <HeaderCell
                       v-for="column in queryBuilderProps.columns"
                       :key="`table-${name}-header-${column.key}`"
@@ -133,7 +129,7 @@
                 </slot>
               </thead>
 
-              <tbody class="bg-white divide-y divide-gray-200">
+              <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-600 dark:divide-gray-400">
                 <slot
                   name="body"
                   :show="show"
@@ -143,16 +139,16 @@
                     :key="`table-${name}-row-${key}`"
                     class=""
                     :class="{
-                      'bg-gray-50': striped && key % 2,
-                      'hover:bg-gray-100': striped,
-                      'hover:bg-gray-50': !striped
+                      'bg-gray-50 dark:bg-gray-500': striped && key % 2,
+                      'hover:bg-gray-100 dark:hover:bg-gray-400': striped,
+                      'hover:bg-gray-50 dark:hover:bg-gray-500': !striped
                     }"
                   >
                     <td
                       v-for="column in queryBuilderProps.columns"
                       v-show="show(column.key)"
                       :key="`table-${name}-row-${key}-column-${column.key}`"
-                      class="text-sm py-4 px-6 text-gray-500 whitespace-nowrap"
+                      class="text-sm py-4 px-6 text-gray-500 whitespace-nowrap dark:text-gray-100"
                     >
                       <slot
                         :name="`cell(${column.key})`"
@@ -199,7 +195,7 @@ import TableGlobalSearch from "./TableGlobalSearch.vue";
 import TableSearchRows from "./TableSearchRows.vue";
 import TableReset from "./TableReset.vue";
 import TableWrapper from "./TableWrapper.vue";
-import { computed, onMounted, ref, watch, onUnmounted, getCurrentInstance, Transition } from "vue";
+import { computed, onMounted, ref, watch, onUnmounted, getCurrentInstance, Transition, inject } from "vue";
 import qs from "qs";
 import clone from "lodash-es/clone";
 import filter from "lodash-es/filter";
